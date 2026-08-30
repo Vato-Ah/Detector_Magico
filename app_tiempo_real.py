@@ -4,7 +4,6 @@ import tensorflow as tf
 import os
 
 # 1. Configuración inicial
-# Asegúrate de que el archivo .h5 esté en la misma carpeta que este script
 modelo_path = 'detector_magico.h5'
 
 if not os.path.exists(modelo_path):
@@ -16,15 +15,15 @@ if not os.path.exists(modelo_path):
 print("Cargando modelo...")
 model = tf.keras.models.load_model(modelo_path)
 
-# Las categorías deben estar en el mismo orden alfabético que usamos en el entrenamiento
+# Las categorías deben estar en el mismo orden alfabético
 categorias = ["audifonos", "celular", "cuaderno", "mouse", "platano"]
 
-# 2. Configurar la cámara web (0 es la cámara por defecto)
+# 2. Configurar la cámara web
 print("Iniciando cámara web. Presiona la tecla 'q' para salir.")
 cap = cv2.VideoCapture(0)
 
 if not cap.isOpened():
-    print("Error: No se pudo acceder a la cámara web.")
+    print("No se pudo acceder a la cámara web.")
     exit()
 
 while True:
@@ -34,7 +33,7 @@ while True:
         break
     
     # 3. Preprocesar la imagen para el modelo
-    # OpenCV lee en BGR, pero el modelo espera RGB. Redimensionamos a 224x224.
+  
     img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     img_resized = cv2.resize(img_rgb, (224, 224))
     
