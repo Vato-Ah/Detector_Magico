@@ -21,24 +21,25 @@ El conjunto de datos es una combinación de imágenes descargadas de internet y 
   - Dense (5 neuronas, activación Softmax)
 
 ## 4. Métricas y Resultados
-El modelo fue evaluado utilizando un conjunto de prueba compuesto exclusivamente por fotografías propias tomadas en condiciones de iluminación y ángulos variables.
+El modelo fue evaluado utilizando un conjunto de prueba de 130 fotografías propias tomadas en condiciones de iluminación y ángulos variables.
 
-- **Accuracy en Validación:** 99.39%
-- **Accuracy en Test (Fotos propias):** 84.78% (Cumple y supera el requisito mínimo del 80%).
+- **Accuracy en Validación**: ~99%
+- **Accuracy en Test (Fotos propias)**: 82.00% (Supera el requisito mínimo del 80%).
 
 ### Reporte de Clasificación (Test):
-| Clase | Precision | Recall | F1-Score |
-| :--- | :---: | :---: | :---: |
-| Audífonos | 0.94 | 0.94 | 0.94 |
-| Celular | 0.43 | 1.00 | 0.60 |
-| Cuaderno | 1.00 | 0.72 | 0.84 |
-| Mouse | 0.94 | 0.89 | 0.92 |
-| Plátano | 1.00 | 0.82 | 0.90 |
+| Clase | Precision | Recall | F1-Score | Support |
+| :--- | :---: | :---: | :---: | :---: |
+| Audífonos | 0.91 | 0.91 | 0.91 | 32 |
+| Celular | 0.31 | 1.00 | 0.47 | 9 |
+| Cuaderno | 0.97 | 0.85 | 0.90 | 39 |
+| Mouse | 1.00 | 0.61 | 0.75 | 33 |
+| Plátano | 1.00 | 0.88 | 0.94 | 17 |
+| **Overall** | **0.92** | **0.82** | **0.84** | **130** |
 
 ### Análisis de Errores:
-Se identificaron dos patrones de error interesantes que demuestran cómo el modelo aprende características visuales locales en lugar de conceptos semánticos:
-1. **Confusión por forma geométrica:** El modelo clasifica cuadernos cerrados de portada oscura como "celular" (98.2% de confianza) debido a la similitud en la forma rectangular y la textura lisa.
-2. **Confusión por color y textura:** En ciertas condiciones de luz, el modelo confunde el mouse con los audífonos, ya que ambos comparten tonos azules, superficies brillantes y formas curvas ergonómicas.
+Se identificaron dos patrones de error que demuestran cómo el modelo aprende características visuales locales:
+1. **Falsos positivos en "Celular"**: El modelo tiene un Recall de 1.00, pero una Precision de 0.31. Clasifica cuadernos cerrados de portada oscura como "celular" debido a la similitud en la forma rectangular y textura.
+2. **Falsos negativos en "Mouse"**: Con una Precision de 1.00 pero Recall de 0.61, el modelo a veces no detecta el mouse o lo confunde con audífonos debido a la similitud en colores (azul/negro) y formas curvas ergonómicas.
 
 ## 5. Instrucciones de Ejecución
 
@@ -49,7 +50,7 @@ Se identificaron dos patrones de error interesantes que demuestran cómo el mode
 ### Instalación
 1. Clonar el repositorio:
    ```bash
-   git clone [URL_DE_TU_REPOSITORIO]
+   git clone https://github.com/Vato-Ah/Detector_Magico.git
    cd Detector_Magico
    
 2. Crear y activar el entono virtual:
@@ -67,3 +68,11 @@ app_tiempo_real.py: Script principal para la inferencia en tiempo real con OpenC
 detector_magico.h5: Pesos del modelo entrenado.
 matriz_confusion.png: Gráfica de la matriz de confusión del conjunto de prueba.
 historial_entrenamiento.png: Gráficas de Accuracy y Loss durante el entrenamiento.
+
+## 7. Entrenamiento del Modelo
+El modelo fue entrenado utilizando Google Colab con GPU T4. El notebook completo está disponible en el archivo `entrenamiento_colab.ipynb` y contiene:
+- Carga y preprocesamiento del dataset
+- Implementación de Transfer Learning con MobileNetV2
+- Cálculo y aplicación de class weights
+- Entrenamiento y evaluación
+- Generación de métricas y gráficas
